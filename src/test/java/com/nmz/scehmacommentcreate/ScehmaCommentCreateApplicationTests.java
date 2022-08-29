@@ -2,6 +2,7 @@ package com.nmz.scehmacommentcreate;
 
 import com.nmz.scehmacommentcreate.Utils.Filter;
 import com.nmz.scehmacommentcreate.pojo.TableColumns;
+import com.nmz.scehmacommentcreate.pojo.Tables_in_hklis;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,10 @@ class ScehmaCommentCreateApplicationTests {
     public void testeee(String tablename, Map map) throws Exception {
         String table = tablename;
         BufferedWriter bw = null;
+        List<Tables_in_hklis> list1 = jdbcTemplate.query("SHOW TABLES IN hklis WHERE Tables_in_hklis = '" + table + "'", new BeanPropertyRowMapper<Tables_in_hklis>(Tables_in_hklis.class));
+
+        if (list1.size() == 0)
+            return;
         List<TableColumns> list = jdbcTemplate.query("show columns from " + table, new BeanPropertyRowMapper<TableColumns>(TableColumns.class));
         StringBuffer sb = new StringBuffer();
         for (TableColumns tableColumns : list) {

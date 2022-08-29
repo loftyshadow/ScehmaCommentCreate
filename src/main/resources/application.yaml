@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:mysql://124.204.68.210:42102/hklisba?useUnicode=true&characterEncoding=utf8
-    username: hklisba
-    password: Sinosoft@hklisba2021
+    url: jdbc:mysql://124.204.68.210:42102/hklis?useUnicode=true&characterEncoding=utf8
+    username: hklis
+    password: Sinosoft@hklis2021
     driver-class-name: com.mysql.cj.jdbc.Driver
