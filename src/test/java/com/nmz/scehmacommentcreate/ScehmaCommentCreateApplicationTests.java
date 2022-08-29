@@ -41,7 +41,7 @@ class ScehmaCommentCreateApplicationTests {
             if (map.get(tableColumns.getField()) != null) {
 
                 sb.append("ALTER TABLE " + tablename + " MODIFY ");
-                    sb.append("`" + tableColumns.getField() + "` " + tableColumns.getType());
+                sb.append("`" + tableColumns.getField() + "` " + tableColumns.getType());
                 if ("NO".equals(tableColumns.getNull())) {
                     sb.append(" NOT NULL ");
                 }
