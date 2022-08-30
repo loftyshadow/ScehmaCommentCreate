@@ -35,8 +35,8 @@ class ScehmaCommentCreateApplicationTests {
     public void createSQL(String tablename, Map<String, String> map) throws Exception {
         BufferedWriter bw = null;
         /*判断是否在数据库中存在对应schema的表*/
-        List<Tables_in_hklis> list1 = jdbcTemplate.query("SHOW TABLES IN " + datebase + " WHERE Tables_in_" + datebase +" = '" + tablename + "'", new BeanPropertyRowMapper<Tables_in_hklis>(Tables_in_hklis.class));
-        if (list1.size() == 0) {
+        List<Tables_in_hklis> existTable = jdbcTemplate.query("SHOW TABLES IN " + datebase + " WHERE Tables_in_" + datebase +" = '" + tablename + "'", new BeanPropertyRowMapper<Tables_in_hklis>(Tables_in_hklis.class));
+        if (existTable.size() == 0) {
             return;
         }
         List<TableColumns> list = jdbcTemplate.query("SHOW COLUMNS FROM " + tablename, new BeanPropertyRowMapper<TableColumns>(TableColumns.class));
@@ -74,8 +74,6 @@ class ScehmaCommentCreateApplicationTests {
         File file = new File(filePath);
         Filter filter = new Filter("Schema.java");
         String[] files = file.list(filter);
-
-        boolean start = false;
         String tablename, finname, notes = "";
         for (String filename : files) {
             Map<String, String> map = new HashMap<>();
@@ -87,18 +85,13 @@ class ScehmaCommentCreateApplicationTests {
             while (!(str = fw.readLine()).contains("FIELDNUM")) {
                 if (str.contains("/**") && str.contains("*/")) {
                     notes = str.substring(str.indexOf("*") + 2, str.indexOf("*/")).trim();
-                    if (!start) {
-                        start = true;
-                    }
                 } else {
-                    if (start) {
                         String[] clown = str.split(" ");
                         String clownname = clown[clown.length - 1];
                         if (!"".equals(clownname)) {
                             map.put(clownname.substring(0, clownname.length() - 1).toUpperCase(), notes);
                         }
                     }
-                }
             }
             createSQL(tablename, map);
             continue;
