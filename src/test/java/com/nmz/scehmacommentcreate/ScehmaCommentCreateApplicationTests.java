@@ -39,6 +39,7 @@ class ScehmaCommentCreateApplicationTests {
         if (existTable.size() == 0) {
             return;
         }
+        /*DESC tablename和SHOW COLUMNS FROM tablename效果一样,都是显示表结构*/
         List<TableColumns> list = jdbcTemplate.query("SHOW COLUMNS FROM " + tablename, new BeanPropertyRowMapper<TableColumns>(TableColumns.class));
         StringBuilder sb = new StringBuilder();
         for (TableColumns tableColumns : list) {
@@ -72,30 +73,36 @@ class ScehmaCommentCreateApplicationTests {
     public void getMap() throws Exception {
         String filePath = "D:\\schema\\";
         File file = new File(filePath);
+        /*通过实现FilenameFilter读取以Schema.java为结尾的文件*/
         Filter filter = new Filter("Schema.java");
         String[] files = file.list(filter);
         String tablename, finname, notes = "";
         for (String filename : files) {
             Map<String, String> map = new HashMap<>();
+            /*根据Schema文件取出表名*/
             tablename = filename.substring(0, filename.indexOf("Schema"));
             finname = filePath + filename;
+            /*通过拼接文件路径和具体文件名字进行文件的读取*/
             FileReader reader = new FileReader(finname);
             BufferedReader fw = new BufferedReader(reader);
             String str;
+            /*当所有字段读取完之后结束文件读取*/
             while (!(str = fw.readLine()).contains("FIELDNUM")) {
                 if (str.contains("/**") && str.contains("*/")) {
                     notes = str.substring(str.indexOf("*") + 2, str.indexOf("*/")).trim();
                 } else {
+                        /*通过空格分成数组，最后一位为对应字段名*/
                         String[] clown = str.split(" ");
                         String clownname = clown[clown.length - 1];
                         if (!"".equals(clownname)) {
+                            /*将字段名和注释作为键值对放入map中，用于链接数据库读取map拼接相对应的注释，此处查找数据库默认字段为全大写，所以进行了toUpperCase方法*/
                             map.put(clownname.substring(0, clownname.length() - 1).toUpperCase(), notes);
                         }
                     }
             }
             createSQL(tablename, map);
-            continue;
         }
+        /*所有文件读取完关闭*/
         System.exit(0);
     }
 }
