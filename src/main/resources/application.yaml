@@ -9,3 +9,5 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 #要选择的具体数据库
 database: bengallis
+filePath: "D:\\schema\\"
+createPath: "D:\\增加注释sql.sql"

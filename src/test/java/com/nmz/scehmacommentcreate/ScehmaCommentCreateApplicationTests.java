@@ -25,6 +25,12 @@ class ScehmaCommentCreateApplicationTests {
     @Value("${database}")
     String datebase;
 
+    @Value("${filePath}")
+    String filePath;
+
+    @Value("${createPath}")
+    String createPath;
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -52,7 +58,7 @@ class ScehmaCommentCreateApplicationTests {
                 sb.append(" COMMENT '").append(map.get(tableColumns.getField())).append("';\n");
             }
         }
-        bw = new BufferedWriter(new FileWriter("D:\\增加注释sql.sql", true));
+        bw = new BufferedWriter(new FileWriter(createPath, true));
         try {
             bw.write(sb.toString());
             bw.newLine();
@@ -71,7 +77,6 @@ class ScehmaCommentCreateApplicationTests {
 
     @Test
     public void getMap() throws Exception {
-        String filePath = "D:\\schema\\";
         File file = new File(filePath);
         /*通过实现FilenameFilter读取以Schema.java为结尾的文件*/
         Filter filter = new Filter("Schema.java");
